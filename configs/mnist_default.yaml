@@ -1,0 +1,64 @@
+# CF-TCVAE Default Configuration for MNIST
+#
+# These hyperparameters are from the best-performing checkpoint (run_id: ovp4bhho)
+# Source: wandb/run-20250925_035048-ovp4bhho/files/config.yaml
+
+# Dataset
+dataset: mnist
+
+# Core CF-TCVAE parameters
+beta: 10.0                      # TC regularization weight
+lr: 0.001                       # Learning rate
+epsilon: 10.0                   # Hinge loss margin for validity
+lambda_validity: 1.0            # Validity loss weight
+alpha_proximity: 300.0          # Proximity loss weight (high for images)
+
+# Architecture
+z_dim: 64                       # Latent dimension
+num_ch: 32                      # Number of channels in conv layers
+class_emb_dim: 32              # Class embedding dimension
+
+# Training
+batch_size: 1024
+test_batch_size: 1024
+max_epochs: 150
+lr_patience: 7                  # Learning rate scheduler patience
+lr_factor: 0.5                  # Learning rate reduction factor
+
+# Prior configuration
+prior: standard
+use_class_conditional_prior: true
+prior_update_mode: ema
+prior_ema_momentum: 0.0001      # EMA momentum for prior updates
+prior_init_std: 1.0
+
+# Total Correlation (class-conditional)
+use_class_conditional_tc: true
+min_samples_per_class: 16
+bank_capacity_per_class: 1024
+
+# Auxiliary Classifier
+use_aux_classifier: true
+aux_weight: 0.5
+aux_warmup_epochs: 10
+aux_on_sampled_z: false
+
+# Likelihood and reconstruction
+likelihood: bernoulli            # Bernoulli for binary MNIST pixels
+use_reconstruction_path: true
+condition_on_target: true
+
+# Optimization
+balance_gradients: false
+gradient_balance_method: normalize
+
+# Black-box classifier
+freeze_classifier: true
+classifier_checkpoint: cf_tcvae/classifiers/checkpoints/mnist_advanced_best.pth
+
+# Reproducibility
+seed: 42
+
+# Device and workers
+device: cuda
+num_workers: 4

@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+
+# PyTorch
+*.pth
+*.pt
+!cf_tcvae/classifiers/checkpoints/*.pth
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+logs/
+*.log
+
+# Results
+results/
+checkpoints/
+!cf_tcvae/classifiers/checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,68 @@
+# CF-TCVAE Default Configuration for Adult Income Dataset
+#
+# These hyperparameters are from the best-performing checkpoint (run_id: 3fu93r06)
+# Source: wandb/run-20251001_200008-3fu93r06/files/config.yaml
+#
+# Key differences from MNIST:
+# - Higher learning rate (0.005 vs 0.001)
+# - Lower epsilon (5.0 vs 10.0)
+# - Much lower alpha_proximity (2.0 vs 300.0) for tabular data
+# - Smaller latent dimension (16 vs 64)
+# - Gaussian likelihood (continuous features)
+# - Higher prior_ema_momentum (0.001 vs 0.0001)
+
+# Dataset
+dataset: adult
+
+# Core CF-TCVAE parameters
+beta: 10.0                      # TC regularization weight
+lr: 0.005                       # Learning rate (higher than MNIST)
+epsilon: 5.0                    # Hinge loss margin (lower than MNIST)
+lambda_validity: 1.0            # Validity loss weight
+alpha_proximity: 2.0            # Proximity loss weight (much lower for tabular)
+
+# Architecture
+z_dim: 16                       # Latent dimension (smaller for tabular)
+input_dim: 108                  # Adult preprocessed feature dimension
+class_emb_dim: 32              # Class embedding dimension
+
+# Training
+batch_size: 1024
+test_batch_size: 1024
+max_epochs: 200
+lr_patience: 10                 # Learning rate scheduler patience
+lr_factor: 0.5                  # Learning rate reduction factor
+
+# Prior configuration
+prior: standard
+use_class_conditional_prior: true
+prior_update_mode: ema
+prior_ema_momentum: 0.001       # EMA momentum (higher than MNIST)
+prior_init_std: 1.0
+
+# Auxiliary Classifier
+use_aux_classifier: true
+aux_weight: 0.5
+aux_warmup_epochs: 10
+aux_on_sampled_z: false
+
+# Likelihood and reconstruction
+likelihood: gaussian             # Gaussian for continuous tabular data
+use_reconstruction_path: true
+condition_on_target: true
+use_all_target_classes: true
+
+# Optimization
+balance_gradients: false
+gradient_balance_method: normalize
+
+# Black-box classifier
+freeze_classifier: true
+classifier_checkpoint: cf_tcvae/classifiers/checkpoints/adult_mlp_full.pth
+
+# Reproducibility
+seed: 42
+
+# Device and workers
+device: cuda
+num_workers: 4
